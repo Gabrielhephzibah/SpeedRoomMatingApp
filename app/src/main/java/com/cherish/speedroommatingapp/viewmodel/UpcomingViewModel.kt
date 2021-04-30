@@ -33,7 +33,6 @@ class UpcomingViewModel(var appDataManager: AppDataManager, var schedulerProvide
                         setUpcomingData(Resource.Empty(it))
                     } else {
                         setUpcomingData(Resource.Ideal(it))
-
                     }
 
                 }, {
