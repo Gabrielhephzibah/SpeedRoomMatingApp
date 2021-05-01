@@ -1,62 +1,31 @@
 package com.cherish.speedroommatingapp.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.provider.Contacts
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.NonNull
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.DrawableImageViewTarget
-import com.bumptech.glide.request.target.DrawableThumbnailImageViewTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.bumptech.glide.signature.ObjectKey
 import com.cherish.speedroommatingapp.R
 import com.cherish.speedroommatingapp.di.module.GlideApp
-import com.cherish.speedroommatingapp.model.mdata.UpcomingData
+import com.cherish.speedroommatingapp.model.mdata.UpcomingEventsData
 import com.cherish.speedroommatingapp.utils.DateUtils
 
 import kotlinx.android.synthetic.main.upcoming_item_layout.view.*
-import kotlinx.android.synthetic.main.upcoming_layout.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.*
-import java.time.Instant.now
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.*
-import kotlin.math.cos
-import kotlin.time.days
 
-class IncomingAdapter(val callback: (Int) -> Unit) :
-    ListAdapter<UpcomingData, IncomingAdapter.IncomingViewHolder>(PojoDiffCallback()){
+class IncomingEventsAdapter(val callback: (Int) -> Unit) :
+    ListAdapter<UpcomingEventsData, IncomingEventsAdapter.IncomingViewHolder>(PojoDiffCallback()){
 
 
 
@@ -140,19 +109,19 @@ class IncomingAdapter(val callback: (Int) -> Unit) :
     }
 
 
-    fun getData(int: Int): UpcomingData {
+    fun getData(int: Int): UpcomingEventsData {
         return getItem(int)
     }
 
-    class PojoDiffCallback : DiffUtil.ItemCallback<UpcomingData>() {
-        override fun areItemsTheSame(oldItem: UpcomingData, newItem: UpcomingData): Boolean {
+    class PojoDiffCallback : DiffUtil.ItemCallback<UpcomingEventsData>() {
+        override fun areItemsTheSame(oldItem: UpcomingEventsData, newItem: UpcomingEventsData): Boolean {
             return oldItem.location == newItem.location
         }
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
-            oldItem:UpcomingData,
-            newItem:UpcomingData
+            oldItem:UpcomingEventsData,
+            newItem:UpcomingEventsData
         ): Boolean {
             return oldItem == newItem
         }

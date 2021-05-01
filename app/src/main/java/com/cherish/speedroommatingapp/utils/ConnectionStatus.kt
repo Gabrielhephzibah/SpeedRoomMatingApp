@@ -37,7 +37,7 @@ object ConnectionStatus  {
             }
             return connectivityCallback
         } else {
-            throw IllegalAccessError("Should not happened")
+            throw IllegalAccessError("EXCEPTION")
         }
     }
 

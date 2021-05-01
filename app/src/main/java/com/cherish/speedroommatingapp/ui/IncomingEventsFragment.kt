@@ -5,16 +5,13 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,35 +22,35 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.cherish.speedroommatingapp.R
 import com.cherish.speedroommatingapp.di.module.GlideApp
-import com.cherish.speedroommatingapp.model.mdata.UpcomingData
+import com.cherish.speedroommatingapp.model.mdata.UpcomingEventsData
 import com.cherish.speedroommatingapp.utils.Status
-import com.cherish.speedroommatingapp.viewmodel.UpcomingViewModel
+import com.cherish.speedroommatingapp.viewmodel.UpcomingEventsViewModel
 import kotlinx.android.synthetic.main.upcoming_layout.*
 import kotlinx.coroutines.*
 import java.io.File
 
-class IncomingFragment : Fragment() {
-    private var mAdapter: IncomingAdapter? = null
-    var upComingViewModel: UpcomingViewModel? = null
-    var newList = ArrayList<UpcomingData>()
+class IncomingEventsFragment : Fragment() {
+    private var mAdapter: IncomingEventsAdapter? = null
+    var upComingViewModel: UpcomingEventsViewModel? = null
+    var newList = ArrayList<UpcomingEventsData>()
     var number: String? = null
     var cacheFailed = true
 
 
-    fun newInstance(): IncomingFragment {
-        return IncomingFragment()
+
+    fun newInstance(): IncomingEventsFragment {
+        return IncomingEventsFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        upComingViewModel = ViewModelProvider(requireActivity()).get(UpcomingViewModel::class.java) }
+        upComingViewModel = ViewModelProvider(requireActivity()).get(UpcomingEventsViewModel::class.java) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,7 +62,7 @@ class IncomingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        mAdapter = IncomingAdapter( callback = {
+        mAdapter = IncomingEventsAdapter( callback = {
             val item = mAdapter!!.getData(it)
             number = item.phone_number
             checkForPermission() })
@@ -73,12 +70,13 @@ class IncomingFragment : Fragment() {
 
         upComingViewModel!!.getUpcomingData().observe(viewLifecycleOwner, Observer {
             when (it.status) {
+
                 Status.IDEAL -> {
+
                     viewLifecycleOwner.lifecycleScope.launch {
                         val operation = async(Dispatchers.IO) {
                             for (item in it.data!!) {
                         if (item.cost.isNullOrBlank()) {
-                            Log.i("fkm", item.toString())
                         } else {
                             val cost = item.cost
                             val location = item.location
@@ -88,13 +86,12 @@ class IncomingFragment : Fragment() {
                             val venue = item.venue
                             val startDate = item.start_time
                             loadImageToCache(imageUrl!!)
-                            newList.add(UpcomingData(cost, endDate, imageUrl, location, phoneNumber, startDate, venue)) } }
+                            newList.add(UpcomingEventsData(cost, endDate, imageUrl, location, phoneNumber, startDate, venue)) } }
                         }
                         operation.await()
                         withContext(Dispatchers.Main){
-                            if (cacheFailed == false){
-                                Toast.makeText(requireActivity(),"Failed to cache images", Toast.LENGTH_LONG).show()
-
+                            if (!cacheFailed){
+                                Toast.makeText(requireActivity(),getString(R.string.failed_to_cache), Toast.LENGTH_LONG).show()
                             }
                             shimmerLayout.visibility = View.GONE
                             mAdapter!!.submitList(newList)
@@ -156,25 +153,15 @@ class IncomingFragment : Fragment() {
     fun loadImageToCache(image: String){
         val future   = GlideApp.with(requireActivity())
             .downloadOnly()
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
             .load(image)
             .listener(object :
                 RequestListener<File> {
-                override fun onResourceReady(
-                    resource: File?,
-                    model: Any?,
-                    target: Target<File>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
+                override fun onResourceReady(resource: File?, model: Any?, target: Target<File>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                    return false
                 }
 
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<File>?,
-                    isFirstResource: Boolean
-                ): Boolean {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<File>?, isFirstResource: Boolean): Boolean {
                     cacheFailed = false
                    return false
 
@@ -183,8 +170,7 @@ class IncomingFragment : Fragment() {
             .submit(200, 200)
 
 
-
-        val cacheFile =   future.get()
+        
     }
 
 

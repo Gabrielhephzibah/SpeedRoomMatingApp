@@ -21,5 +21,6 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="not_granted">Permission not granted</string>
+    <string name="failed_to_cache">Failed to cache images</string>
 </resources>
 

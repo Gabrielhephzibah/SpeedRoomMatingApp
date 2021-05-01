@@ -10,7 +10,7 @@ import com.cherish.speedroommatingapp.R
 import com.cherish.speedroommatingapp.ViewModelProviderFactory
 import com.cherish.speedroommatingapp.utils.ConnectionStatus
 import com.cherish.speedroommatingapp.utils.Status
-import com.cherish.speedroommatingapp.viewmodel.UpcomingViewModel
+import com.cherish.speedroommatingapp.viewmodel.UpcomingEventsViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -19,19 +19,21 @@ class MainActivity : AppCompatActivity() {
     @set:Inject
     var factory: ViewModelProviderFactory? = null
     var pagerAdapter : FragmentStateAdapter? = null
-    var upcomingViewModel : UpcomingViewModel? = null
+    var upcomingViewModel : UpcomingEventsViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
-        upcomingViewModel = ViewModelProvider(this, factory!!).get(UpcomingViewModel::class.java)
+
+        upcomingViewModel = ViewModelProvider(this, factory!!).get(UpcomingEventsViewModel::class.java)
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.upcoming)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.archived)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.options)))
         pagerAdapter = FragmentStateAdapter(this, tabLayout.tabCount)
         viewPager.adapter = pagerAdapter
         viewPager.isUserInputEnabled = false
+
         makeApiRequest()
 
         upcomingViewModel!!.getUpcomingData().observe(this, Observer {
@@ -45,13 +47,18 @@ class MainActivity : AppCompatActivity() {
                     titleText.text = getString(R.string.errorText)
                     message.text = getString(R.string.errorMessage)
                 }
+                Status.IDEAL -> {
+                    stateLayout.visibility = View.GONE
+                }
 
                 else -> {}
             }
         })
 
         retry.setOnClickListener{
+            stateLayout.visibility = View.GONE
             makeApiRequest()
+
         }
 
 
@@ -60,7 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     fun makeApiRequest(){
         if (ConnectionStatus.isOnline(this)){
-            Log.i("here",  "Internet" )
             upcomingViewModel!!.getUpcomingEvent()
         }else{
             stateLayout.visibility = View.VISIBLE
