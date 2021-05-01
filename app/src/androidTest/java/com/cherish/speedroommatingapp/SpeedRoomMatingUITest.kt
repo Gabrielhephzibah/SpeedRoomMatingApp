@@ -36,7 +36,6 @@ class SpeedRoomMatingUITest {
     fun checkViewPagerIsVisible() {
         onView(withId(R.id.viewPager)).check(matches(isDisplayed()))
 
-
         }
 
         @Test
@@ -79,10 +78,18 @@ class SpeedRoomMatingUITest {
         @Test
         @Throws(Exception::class)
         fun checkRecyclerClick() {
-            onView(withId(R.id.recyclerView)).check(ViewAssertions.matches(isDisplayed()))
+            onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
             onView(allOf(withId(R.id.recyclerView), isCompletelyDisplayed())).perform(click())
 
         }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkRetryClick() {
+        onView(withId(R.id.retry)).check(matches(isDisplayed()))
+        onView(allOf(withId(R.id.retry), isDisplayed())).perform(click())
+
+    }
 
 
 
