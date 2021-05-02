@@ -64,19 +64,19 @@ class UpcomingViewModelTest {
     @Test
     fun testGetUpcomingEvent(){
         val list = mutableListOf<UpcomingEventsResponse>()
-        val response = UpcomingEventsResponse("free","12/34/2012", "http//nnn","Lagos","+234677", "23/7/23","Freetown")
+        val response = UpcomingEventsResponse("free","2021-06-20T23:14:54Z", "https://images.unsplash.com/photo-1543007630-9710e4a00a20","The Penny Farthing","+44 20 8759 9036", "2021-06-17T10:14:54Z", "Manhattan")
         list.add(response)
         `when`(appDataManager!!.getUpComingEvents(BuildConfig.SECRET_KEY)).thenReturn(Flowable.just(list))
         upcomingEventsViewModel!!.getUpcomingEvent()
         testScheduler!!.triggerActions()
         verify(observer, times(1))!!.onChanged(argumentCaptor.capture())
-        
+
         }
 
     @Test
     fun idealState(){
         val list = mutableListOf<UpcomingEventsResponse>()
-        val response = UpcomingEventsResponse("free","12/34/2012", "http//nnn","Lagos","+234677", "23/7/23","Freetown")
+        val response = UpcomingEventsResponse("free","2021-06-20T23:14:54Z", "https://images.unsplash.com/photo-1543007630-9710e4a00a20","The Penny Farthing","+44 20 8759 9036", "2021-06-17T10:14:54Z", "Manhattan")
         list.add(response)
         `when`(appDataManager!!.getUpComingEvents(BuildConfig.SECRET_KEY)).thenReturn(Flowable.just(list))
         upcomingEventsViewModel!!.getUpcomingEvent()

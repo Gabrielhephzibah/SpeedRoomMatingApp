@@ -27,6 +27,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.cherish.speedroommatingapp.R
+import com.cherish.speedroommatingapp.ViewModelProviderFactory
 import com.cherish.speedroommatingapp.di.module.GlideApp
 import com.cherish.speedroommatingapp.model.mdata.UpcomingEventsData
 import com.cherish.speedroommatingapp.utils.Status
@@ -34,8 +35,11 @@ import com.cherish.speedroommatingapp.viewmodel.UpcomingEventsViewModel
 import kotlinx.android.synthetic.main.upcoming_layout.*
 import kotlinx.coroutines.*
 import java.io.File
+import javax.inject.Inject
 
 class IncomingEventsFragment : Fragment() {
+    @set:Inject
+    var factory: ViewModelProviderFactory? = null
     private var mAdapter: IncomingEventsAdapter? = null
     var upComingViewModel: UpcomingEventsViewModel? = null
     var newList = ArrayList<UpcomingEventsData>()
@@ -43,14 +47,16 @@ class IncomingEventsFragment : Fragment() {
     var cacheFailed = true
 
 
-
-    fun newInstance(): IncomingEventsFragment {
-        return IncomingEventsFragment()
-    }
+//    fun newInstance(): IncomingEventsFragment {
+//        return IncomingEventsFragment()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        upComingViewModel = ViewModelProvider(requireActivity()).get(UpcomingEventsViewModel::class.java) }
+
+
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,19 +66,18 @@ class IncomingEventsFragment : Fragment() {
     @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        upComingViewModel = ViewModelProvider(activity!!).get(UpcomingEventsViewModel::class.java)
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
         mAdapter = IncomingEventsAdapter( callback = {
             val item = mAdapter!!.getData(it)
             number = item.phone_number
             checkForPermission() })
-        recyclerView.adapter = mAdapter
+            recyclerView.adapter = mAdapter
 
         upComingViewModel!!.getUpcomingData().observe(viewLifecycleOwner, Observer {
             when (it.status) {
-
                 Status.IDEAL -> {
-
                     viewLifecycleOwner.lifecycleScope.launch {
                         val operation = async(Dispatchers.IO) {
                             for (item in it.data!!) {
@@ -151,9 +156,9 @@ class IncomingEventsFragment : Fragment() {
 
 
     fun loadImageToCache(image: String){
-        val future   = GlideApp.with(requireActivity())
+        val future   = GlideApp.with(recyclerView)
             .downloadOnly()
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .load(image)
             .listener(object :
                 RequestListener<File> {

@@ -21,11 +21,8 @@ import org.junit.Before
 @RunWith(AndroidJUnit4::class)
 class SpeedRoomMatingUITest {
 
-
     @get:Rule
-    var mActivityRule = ActivityTestRule(
-        MainActivity::class.java
-    )
+    var mActivityRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
     fun setUp() {
@@ -38,50 +35,45 @@ class SpeedRoomMatingUITest {
 
         }
 
-        @Test
-        @Throws(Exception::class)
-        fun checkTabLayoutIsVisible() {
-            onView(withId(R.id.tabLayout)).check(matches(isDisplayed()))
-        }
+    @Test
+    @Throws(Exception::class)
+    fun checkTabLayoutIsVisible() {
+        onView(withId(R.id.tabLayout)).check(matches(isDisplayed()))
+    }
 
 
-        @Test
-        @Throws(Exception::class)
-        fun checkAppBarIsVisible() {
-            onView(withId(R.id.appBar)).check(matches(isDisplayed()))
-        }
+    @Test
+    @Throws(Exception::class)
+    fun checkAppBarIsVisible() {
+        onView(withId(R.id.appBar)).check(matches(isDisplayed()))
+    }
 
 
-        @Test
-        @Throws(Exception::class)
-        fun checkToolBarIsVisible() {
-            onView(withId(R.id.toolBar)).check(matches(isDisplayed()))
-        }
+    @Test
+    @Throws(Exception::class)
+    fun checkToolBarIsVisible() {
+        onView(withId(R.id.toolBar)).check(matches(isDisplayed()))
+    }
 
-        @Test
-        @Throws(Exception::class)
-        fun checkStateLayoutIsNotVisible() {
-            onView(withId(R.id.stateLayout)).check(matches(not(isDisplayed())))
-        }
+    @Test
+    @Throws(Exception::class)
+    fun checkStateLayoutIsNotVisible() {
+        onView(withId(R.id.stateLayout)).check(matches(not(isDisplayed())))
+    }
 
-        @Test
-        @Throws(Exception::class)
-        fun checkViewPagerFragmentIsDisplayed() {
-            onView(allOf(withId(R.id.viewPager), isCompletelyDisplayed())).check(
-                matches(
-                    withEffectiveVisibility(Visibility.VISIBLE)
-                )
-            )
+    @Test
+    @Throws(Exception::class)
+    fun checkViewPagerFragmentIsDisplayed() {
+        onView(allOf(withId(R.id.viewPager), isCompletelyDisplayed())).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+    }
 
-        }
+    @Test
+    @Throws(Exception::class)
+    fun checkRecyclerClick() {
+        onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+        onView(allOf(withId(R.id.recyclerView), isCompletelyDisplayed())).perform(click())
 
-        @Test
-        @Throws(Exception::class)
-        fun checkRecyclerClick() {
-            onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
-            onView(allOf(withId(R.id.recyclerView), isCompletelyDisplayed())).perform(click())
-
-        }
+    }
 
     @Test
     @Throws(Exception::class)
