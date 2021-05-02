@@ -8,7 +8,7 @@ class FragmentStateAdapter(fragmentActivity: FragmentActivity, private var tabCo
 
 
     override fun createFragment(position: Int): Fragment {
-        return IncomingEventsFragment().newInstance()
+        return IncomingEventsFragment()
 
 
     }

@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
-
         upcomingViewModel = ViewModelProvider(this, factory!!).get(UpcomingEventsViewModel::class.java)
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.upcoming)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.archived)))
@@ -33,9 +32,7 @@ class MainActivity : AppCompatActivity() {
         pagerAdapter = FragmentStateAdapter(this, tabLayout.tabCount)
         viewPager.adapter = pagerAdapter
         viewPager.isUserInputEnabled = false
-
         makeApiRequest()
-
         upcomingViewModel!!.getUpcomingData().observe(this, Observer {
             when(it.status){
                 Status.EMPTY -> {
