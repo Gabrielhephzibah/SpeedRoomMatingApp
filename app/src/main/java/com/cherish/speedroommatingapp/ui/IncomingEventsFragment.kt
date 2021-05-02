@@ -47,10 +47,6 @@ class IncomingEventsFragment : Fragment() {
     var cacheFailed = true
 
 
-//    fun newInstance(): IncomingEventsFragment {
-//        return IncomingEventsFragment()
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -156,9 +152,9 @@ class IncomingEventsFragment : Fragment() {
 
 
     fun loadImageToCache(image: String){
-        val future   = GlideApp.with(recyclerView)
+        GlideApp.with(recyclerView)
             .downloadOnly()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
             .load(image)
             .listener(object :
                 RequestListener<File> {
