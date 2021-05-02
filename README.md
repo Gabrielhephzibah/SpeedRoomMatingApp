@@ -57,7 +57,7 @@ Glide
 
 -   Used glide to load image into imageView because it load and display images in an optimized manner, it allows disk caching and loading images  in background threads without affecting the main thread
 
-State Management
+## State Management
 
 -   Used a generic Resources class  to maintain the state of the app, this resource class captures both the state and the data.
 
