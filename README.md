@@ -27,7 +27,7 @@ Dagger2
 
 -   Used Dagger2 for dependency injection of classes because it allows easy partitioning of related dependencies into different containers.
 
--   It helps to construct instances of my classes and satisfies their dependencies which means I don't need to keep instantiating my classes all over the app and this helps in app optimization and reduces boilerplate code hence making it more readable and testable
+-  Because It helps to construct instances of my classes and satisfies their dependencies which means I don't need to keep instantiating my classes all over the app and this helps in app optimization and reduces boilerplate code hence making it more readable and testable
 
 
 
@@ -55,7 +55,9 @@ Retrofit
 
 Glide
 
--   Used glide to load image into imageView because it load and display images in an optimized manner, it allows disk caching and loading images  in background threads without affecting the main thread
+-   Used glide to load image into imageView because it loads and display images in an optimized manner, it allows disk caching and loading images in background threads without affecting the main thread
+
+
 
 ## State Management
 
@@ -68,4 +70,13 @@ Glide
 
 -   Used firebase Crashlytics because it provides real time crash reports  that helps to track, prioritize, and fix stability issues in the application.
 
--   It helps to gain user insight by helping to solve crashes users run into that I can't seem to reproduce on my end.
+-   Because it helps to gain user insight by helping to solve crashes users might run into that I can't seem to reproduce on my end.
+
+
+
+### Things I would have done if I had more time
+
+-   Implement enabling switching beetween dark themes and light themes in the application
+
+-   Write more unit test and integration test to cover more cases in the application.
+
